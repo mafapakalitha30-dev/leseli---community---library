@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Library Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <div class="brand">📚 Community Library</div>
+      <h1>Library Management System</h1>
+      <p class="muted">Sign in to manage books, stock, transactions and users.</p>
+      <form id="loginForm">
+        <label>Username
+          <input id="loginUsername" type="text" placeholder="Enter username" required>
+        </label>
+        <label>Password
+          <input id="loginPassword" type="password" placeholder="Enter password" required>
+        </label>
+        <button class="btn primary full" type="submit">Login</button>
+        <p id="loginMessage" class="message"></p>
+      </form>
+      <small>Demo admin: <b>admin</b> / <b>admin123</b></small>
+    </div>
+  </div>
+
+  <div id="app" class="app hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand">📚 <span>Community Library</span></div>
+      <nav>
+        <button class="nav-btn active" data-page="dashboard">🏠 Dashboard</button>
+        <button class="nav-btn" data-page="books">📖 Book Management</button>
+        <button class="nav-btn" data-page="transactions">🔄 Transactions</button>
+        <button class="nav-btn" data-page="users">👥 User Management</button>
+      </nav>
+      <button id="logoutBtn" class="logout">↪ Logout</button>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h2 id="pageTitle">Dashboard</h2>
+          <p id="welcomeText" class="muted"></p>
+        </div>
+        <span id="roleBadge" class="badge">Admin</span>
+      </header>
+
+      <section id="dashboard" class="page active-page">
+        <div class="stats">
+          <div class="stat-card"><span>Total Titles</span><strong id="statTitles">0</strong></div>
+          <div class="stat-card"><span>Total Copies</span><strong id="statCopies">0</strong></div>
+          <div class="stat-card"><span>Available Copies</span><strong id="statAvailable">0</strong></div>
+          <div class="stat-card warning"><span>Low Stock</span><strong id="statLow">0</strong></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Current Book Availability</h3>
+            <input id="dashboardSearch" class="search" type="search" placeholder="Search books...">
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Title</th><th>Author</th><th>Genre</th><th>ISBN</th><th>Stock</th><th>Status</th></tr></thead>
+              <tbody id="dashboardBooks"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="books" class="page">
+        <div class="panel">
+          <div class="panel-head"><h3>Add New Book</h3></div>
+          <form id="bookForm" class="form-grid">
+            <input type="hidden" id="bookId">
+            <label>Title<input id="bookTitle" required></label>
+            <label>Author<input id="bookAuthor" required></label>
+            <label>Genre<input id="bookGenre" required></label>
+            <label>ISBN<input id="bookISBN" required></label>
+            <label>Initial Quantity<input id="bookQuantity" type="number" min="0" required></label>
+            <div class="form-actions">
+              <button class="btn primary" type="submit" id="bookSubmit">Add Book</button>
+              <button class="btn secondary hidden" type="button" id="cancelBookEdit">Cancel</button>
+            </div>
+          </form>
+          <p id="bookMessage" class="message"></p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h3>Book List</h3><input id="bookSearch" class="search" type="search" placeholder="Search title, author, ISBN..."></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Title</th><th>Author</th><th>Genre</th><th>ISBN</th><th>Stock</th><th>Actions</th></tr></thead>
+              <tbody id="booksTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="transactions" class="page">
+        <div class="panel">
+          <div class="panel-head"><h3>Record Stock Transaction</h3></div>
+          <form id="transactionForm" class="form-grid">
+            <label>Book<select id="transactionBook" required></select></label>
+            <label>Transaction Type
+              <select id="transactionType">
+                <option value="add">Add Stock</option>
+                <option value="borrow">Borrow / Deduct Stock</option>
+              </select>
+            </label>
+            <label>Quantity<input id="transactionQuantity" type="number" min="1" required></label>
+            <div class="form-actions"><button class="btn primary" type="submit">Save Transaction</button></div>
+          </form>
+          <p id="transactionMessage" class="message"></p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h3>Transaction History</h3></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Date & Time</th><th>Book</th><th>Type</th><th>Quantity</th><th>Stock After</th></tr></thead>
+              <tbody id="transactionsTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="users" class="page">
+        <div class="panel">
+          <div class="panel-head"><h3>Add / Update User</h3></div>
+          <form id="userForm" class="form-grid">
+            <input type="hidden" id="userId">
+            <label>Name<input id="userName" required></label>
+            <label>Membership ID<input id="membershipId" required></label>
+            <label>Role<select id="userRole"><option>Member</option><option>Admin</option></select></label>
+            <label>Username<input id="userUsername" required></label>
+            <label>Password<input id="userPassword" type="password" required></label>
+            <div class="form-actions">
+              <button class="btn primary" type="submit" id="userSubmit">Add User</button>
+              <button class="btn secondary hidden" type="button" id="cancelUserEdit">Cancel</button>
+            </div>
+          </form>
+          <p id="userMessage" class="message"></p>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h3>User Accounts</h3></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Name</th><th>Membership ID</th><th>Role</th><th>Username</th><th>Actions</th></tr></thead>
+              <tbody id="usersTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
